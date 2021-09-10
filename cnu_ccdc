@@ -83,13 +83,16 @@ printf "${BLUE}
          MORE SOON!  	               |            MORE SOON!                 |                
                                        |                                       |                
 -------------------------------------------------------------------------------         
-              
+Type 'quit' to exit the program              
 CNU CCDC ${NC}|${BLUE} root💀kali ---> "
 read choice
 if [ $choice == '1' ]
 then
 	clear
 	scanmenu
+elif [ $choice == 'quit' ]
+then
+	exit
 	
 elif [ $choice == '5' ]
 then
@@ -121,7 +124,8 @@ printf "
          MORE SOON!  	               |            MORE SOON!                 |                
                                        |                                       |                
 -------------------------------------------------------------------------------         
-              
+Type 'back' to return to the previous menu
+Type 'quit' to exit the program
 CNU CCDC ${NC}|${BLUE} root💀kali ---> "
 read choice
 if [ $choice == '1' ]
@@ -133,6 +137,13 @@ elif [ $choice == '2' ]
 then
 
 	niktowebscan
+elif [ $choice == 'back' ]
+then 
+	continue
+	clear
+elif [ $choice == 'quit' ]
+then
+	exit
 
 else
 	echo 'Invlaid Selection'
