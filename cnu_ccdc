@@ -33,6 +33,22 @@ printf "${GREEN}
 [✓] FINISHED SCANNING		 [✓] |
 -------------------------------------"
 }
+updater(){
+printf "Enter your github email: "
+read email
+printf "Enter your github username: "
+read username
+git config --global user.email "$email"
+git config --global user.name "$username"
+clear
+git pull
+printf "${GREEN}
+-------------------------------------
+[✓] FINISHED UPDATING		 [✓] |
+-------------------------------------" 
+sleep 3
+front
+}
 #MENUS UNDER THIS COMMENT-------------------------------------------------------------------------------------------------------------------------------------------
 front(){
 printf "${BLUE}
@@ -62,7 +78,7 @@ printf "${BLUE}
    				       |                                       |
     				       |                                       |
                                        |                                       |
-                                       |                                       |
+5) Check for client Update             |                                       |
                                        |                                       |                
          MORE SOON!  	               |            MORE SOON!                 |                
                                        |                                       |                
@@ -74,6 +90,12 @@ if [ $choice == '1' ]
 then
 	clear
 	scanmenu
+	
+elif [ $choice == '5' ]
+then
+	clear
+	updater
+	
 	
 else
 	echo 'Invalid Menu Selection'
