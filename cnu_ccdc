@@ -34,14 +34,23 @@ printf "${GREEN}
 -------------------------------------"
 }
 updater(){
-printf "Enter your github email: "
-read email
-printf "Enter your github username: "
-read username
-git config --global user.email "$email"
-git config --global user.name "$username"
-clear
-git pull
+git stash save "$patch"
+printf "Is this your first time updating? (yes/no)"
+read choice
+if [ $choice == 'yes' ]
+then
+	printf "Enter your github email: "
+	read email
+	printf "Enter your github username: "
+	read username
+	git config --global user.email "$email"
+	git config --global user.name "$username"
+	clear
+	git pull
+else
+	clear 
+	git pull
+fi
 printf "${GREEN}
 -------------------------------------
 [✓] FINISHED UPDATING		 [✓] |
