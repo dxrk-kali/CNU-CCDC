@@ -8,7 +8,7 @@ YLLW='\033[1;33m'
 DG='\033[0;37m'
 LR='\033[0;31m'
 BLUE='\033[0;34m'
-patch=1.10
+patch=1.20
 #END COLORS
 #FUNCTIONS START----------------------------------------------------------------------------------------------------------------------------------------------------
 nmapipscan(){
@@ -62,9 +62,37 @@ service_scan(){
 gnome-terminal --command="bash -c 'service --status-all; $SHELL'"
 
 }
+firewall_launch(){
+gnome-terminal --command="bash -c 'ufw enable; $SHELL'"
+}
+firewall_deactivate(){
+gnome-terminal --command="bash -c 'ufw disable; $SHELL'"
+}
+firewall_status(){
+gnome-terminal --command="bash -c 'ufw status verbose; $SHELL'"
+}
+enable_logs(){
+gnome-terminal --command="bash -c 'ufw logging on; $SHELL'"
+}
+disable_logs(){
+gnome-terminal --command="bash -c 'ufw logging off; $SHELL'"
+}
+check_logs(){
+gnome-terminal --command="bash -c 'less /var/log/ufw*; $SHELL'"
+}
+rsys_log_start(){
+gnome-terminal --command="bash -c 'systemctl start rsyslog; echo [✓] STARTED RSYSLOG [✓]; $SHELL'"
+}
+enable_rsyslog(){
+gnome-terminal --command="bash -c 'systemctl enable rsyslog; $SHELL'"
+}
+rsyslog_status(){
+gnome-terminal --command="bash -c 'service rsyslog status; $SHELL'"
+}
+
 #MENUS UNDER THIS COMMENT-------------------------------------------------------------------------------------------------------------------------------------------
 front(){
-printf "${BLUE}
+printf "
    			     ______________   _______  __
    			     __  ____/___  | / /__  / / /
    		 	     _  /     __   |/ / _  / / / 
@@ -79,12 +107,14 @@ printf "${BLUE}
               
               			     v${patch}
               
-   		             Always one step ahead. 
+   		             Always one step ahead.
+   		                 *RUN AS ROOT* 
    	
 -------------------------------------------------------------------------------
                  	           Main Menu                                   |                                                
 -------------------------------------------------------------------------------
 1) Attack Vector Scanning              |                                       |
+2) Firewall Management                 |                                       |
                                        |                                       |
 	                               |				       |
 	                               |                                       |
@@ -96,13 +126,18 @@ printf "${BLUE}
          MORE SOON!  	               |            MORE SOON!                 |                
                                        |                                       |                
 -------------------------------------------------------------------------------         
-Type 'quit' to exit the program              
-CNU CCDC ${NC}|${BLUE} root💀kali ---> "
+Type 'quit' to exit the program  
+            
+CNU CCDC |${BLUE} root💀kali ---> ${NC}"
 read choice
 if [ $choice == '1' ]
 then
 	clear
 	scanmenu
+elif [ $choice == '2' ]
+then
+	clear
+	Firewall_menu
 elif [ $choice == 'quit' ]
 then
 	exit
@@ -140,24 +175,28 @@ printf "
 -------------------------------------------------------------------------------         
 Type 'back' to return to the previous menu
 Type 'quit' to exit the program
-CNU CCDC ${NC}|${BLUE} root💀kali ---> "
+
+CNU CCDC |${BLUE} root💀kali ---> ${NC}"
 read choice
 if [ $choice == '1' ]
 then
 
 	nmapipscan
+	scanmenu
 	
 elif [ $choice == '2' ]
 then
 
 	niktowebscan
+	scanmenu
 elif [ $choice == '3' ]
 then
 
 	service_scan
+	scanmenu
 elif [ $choice == 'back' ]
 then 
-	continue
+	front
 	clear
 elif [ $choice == 'quit' ]
 then
@@ -168,6 +207,92 @@ else
 	clear
 	scanmenu
 fi
+}
+Firewall_menu(){
+printf "
+-------------------------------------------------------------------------------
+                 	     Firewall Menu                                     |                                                
+-------------------------------------------------------------------------------
+1) Launch Firewall (UFW)               |                                       |
+2) Deactivate Firewall (UFW)           |                                       |
+3) Check Firewall Status (UFW)         |                                       |
+4) Enable Logging (UFW)                |                                       |
+5) Disable Logging (UFW)               |                                       |
+6) Check UFW Logs (UFW)                |                                       |
+7) Start RSYSLOG                       |                                       |
+8) Enable RSYSLOG                      |                                       |
+9) Check RSYSLOG status	               |				       |
+                                       |                                       |
+         MORE SOON!  	               |            MORE SOON!                 |                
+                                       |                                       |                
+-------------------------------------------------------------------------------         
+Type 'back' to return to the previous menu
+Type 'quit' to exit the program
+
+CNU CCDC |${BLUE} root💀kali ---> ${NC}"
+read choice
+if [ $choice == '1' ]
+then
+
+	firewall_launch
+	Firewall_menu
+	
+elif [ $choice == '2' ]
+then
+
+	firewall_deactivate
+	Firewall_menu
+	
+elif [ $choice == '3' ]
+then
+
+	firewall_status
+	Firewall_menu
+	
+elif [ $choice == '4' ]
+then
+	enable_logs
+	Firewall_menu
+	
+elif [ $choice == '5' ]
+then
+	disable_logs
+	Firewall_menu
+	
+elif [ $choice == '6' ]
+then
+	check_logs
+	Firewall_menu
+	
+elif [ $choice == '7' ]
+then
+	rsys_log_start
+	Firewall_menu
+	
+elif [ $choice == '8' ]
+then
+	enable_rsyslog
+	Firewall_menu
+	
+elif [ $choice == '9' ]
+then
+	rsyslog_status
+	Firewall_menu
+	
+elif [ $choice == 'back' ]
+then 
+	front
+elif [ $choice == 'quit' ]
+then
+	exit
+
+else
+	echo 'Invlaid Selection'
+	clear
+	Firewall_menu
+	
+fi
+
 }
 #END OF FUCNTION DEVELOPMENT -----------------------------------------------------------------------------------------------------------------------------------------
 front
