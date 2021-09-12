@@ -93,6 +93,12 @@ gnome-terminal --command="bash -c 'systemctl enable rsyslog; $SHELL'"
 rsyslog_status(){
 gnome-terminal --command="bash -c 'service rsyslog status; $SHELL'"
 }
+loggedon_users(){
+gnome-terminal --command="bash -c 'w; $SHELL'"
+}
+login_logs(){
+gnome-terminal --command="bash -c 'last; $SHELL'"
+}
 
 #MENUS UNDER THIS COMMENT-------------------------------------------------------------------------------------------------------------------------------------------
 front(){
@@ -119,7 +125,7 @@ printf "
 -------------------------------------------------------------------------------
 1) Attack Vector Scanning              |                                       |
 2) Firewall Management                 |                                       |
-                                       |                                       |
+3) Live Triage                         |                                       |
 	                               |				       |
 	                               |                                       |
    				       |                                       |
@@ -142,6 +148,10 @@ elif [ $choice == '2' ]
 then
 	clear
 	Firewall_menu
+elif [ $choice == '3' ]
+then
+	clear
+	livetriage_menu
 elif [ $choice == 'quit' ]
 then
 	exit
@@ -212,6 +222,7 @@ else
 	scanmenu
 fi
 }
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Firewall_menu(){
 printf "
 -------------------------------------------------------------------------------
@@ -301,6 +312,53 @@ else
 	Firewall_menu
 	
 fi
+
+}
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+livetriage_menu(){
+printf "   	
+-------------------------------------------------------------------------------
+                 	           Live Triage                                 |                                                
+-------------------------------------------------------------------------------
+1) List all logged on users            |                                       |
+2) Check Login Logs	               |				       |
+	                               |                                       |
+   				       |                                       |
+    				       |                                       |
+                                       |                                       |
+                                       |                                       |
+                                       |                                       |                
+         MORE SOON!  	               |            MORE SOON!                 |                
+                                       |                                       |                
+-------------------------------------------------------------------------------         
+Type 'back' to return to the previous menu
+Type 'quit' to exit the program  
+            
+CNU CCDC |${BLUE} root💀kali ---> ${NC}"
+read choice
+if [ $choice == '1' ]
+then
+	
+	loggedon_users
+	livetriage_menu
+	
+elif [ $choice == '2' ]
+then
+	
+	login_logs
+	livetriage_menu
+	
+elif [ $choice == 'back' ]
+then 
+	front
+elif [ $choice == 'quit' ]
+then
+	exit	
+else
+	echo 'Invalid Menu Selection'
+	front
+fi
+
 
 }
 #END OF FUCNTION DEVELOPMENT -----------------------------------------------------------------------------------------------------------------------------------------
