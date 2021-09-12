@@ -8,7 +8,7 @@ YLLW='\033[1;33m'
 DG='\033[0;37m'
 LR='\033[0;31m'
 BLUE='\033[0;34m'
-patch=1.30
+patch=1.31
 #END COLORS
 #FUNCTIONS START----------------------------------------------------------------------------------------------------------------------------------------------------
 nmapipscan(){
@@ -98,6 +98,9 @@ gnome-terminal --command="bash -c 'w; $SHELL'"
 }
 login_logs(){
 gnome-terminal --command="bash -c 'last; $SHELL'"
+}
+failed_logins(){
+gnome-terminal --command="bash -c 'faillog -a; $SHELL'"
 }
 
 #MENUS UNDER THIS COMMENT-------------------------------------------------------------------------------------------------------------------------------------------
@@ -322,7 +325,7 @@ printf "
 -------------------------------------------------------------------------------
 1) List all logged on users            |                                       |
 2) Check Login Logs	               |				       |
-	                               |                                       |
+3) View Failed Login Attempts	       |                                       |
    				       |                                       |
     				       |                                       |
                                        |                                       |
@@ -346,6 +349,12 @@ elif [ $choice == '2' ]
 then
 	
 	login_logs
+	livetriage_menu
+	
+elif [ $choice == '3' ]
+then
+	
+	failed_logins
 	livetriage_menu
 	
 elif [ $choice == 'back' ]
