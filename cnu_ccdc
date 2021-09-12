@@ -79,6 +79,10 @@ gnome-terminal --command="bash -c 'ufw logging off; $SHELL'"
 }
 check_logs(){
 gnome-terminal --command="bash -c 'less /var/log/ufw*; $SHELL'"
+
+}
+log_cheatsheet(){
+printf '\n\n\n IN= This field shows the device for incoming traffic.\n OUT= This field shows the device for outgoing traffic. \n MAC= This field shows the device’s MAC address. \n SRC= This field displays a connection source IP address. \n DST= Displays the destination IP address of a connection. \n LEN= This field shows the packet’s length. \n TOS= (Type of Service) This field is used for packet classification, and it is deprecated.\n PREC= This field shows the Precedence Type of Service. \n TTL= This field shows Time To Live. \n ID= This field shows a unique ID for the IP datagram, which is shared by fragments of the same packet. \n PROTO= This field shows the used protocol. \n\n\n'
 }
 rsys_log_start(){
 gnome-terminal --command="bash -c 'systemctl start rsyslog; echo [✓] STARTED RSYSLOG [✓]; $SHELL'"
@@ -221,7 +225,8 @@ printf "
 6) Check UFW Logs (UFW)                |                                       |
 7) Start RSYSLOG                       |                                       |
 8) Enable RSYSLOG                      |                                       |
-9) Check RSYSLOG status	               |				       |
+9) Check RSYSLOG status                |                                       |
+10) Print Log Cheatsheet	       |				       |
                                        |                                       |
          MORE SOON!  	               |            MORE SOON!                 |                
                                        |                                       |                
@@ -279,6 +284,10 @@ then
 	rsyslog_status
 	Firewall_menu
 	
+elif [ $choice == '10' ]
+then
+	log_cheatsheet
+	Firewall_menu	
 elif [ $choice == 'back' ]
 then 
 	front
