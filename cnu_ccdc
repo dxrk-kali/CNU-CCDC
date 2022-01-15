@@ -12,7 +12,6 @@ patch=1.31
 #END COLORS
 #FUNCTIONS START----------------------------------------------------------------------------------------------------------------------------------------------------
 nmapipscan(){
-
 printf "${YLLW} [+] Please enter your target IP address ---> "
 read targip
 echo '[+] What ports would you like to scan on --->'
@@ -101,6 +100,11 @@ gnome-terminal --command="bash -c 'last; $SHELL'"
 }
 failed_logins(){
 gnome-terminal --command="bash -c 'faillog -a; $SHELL'"
+}
+kick_user(){
+printf "Enter the name of the user you would like to terminate: "
+read user
+sudo pkill -u $user
 }
 
 #MENUS UNDER THIS COMMENT-------------------------------------------------------------------------------------------------------------------------------------------
@@ -326,7 +330,7 @@ printf "
 1) List all logged on users            |                                       |
 2) Check Login Logs	               |				       |
 3) View Failed Login Attempts	       |                                       |
-   				       |                                       |
+4) Terminate User (PID)   	       |                                       |
     				       |                                       |
                                        |                                       |
                                        |                                       |
@@ -355,6 +359,12 @@ elif [ $choice == '3' ]
 then
 	
 	failed_logins
+	livetriage_menu
+
+elif [ $choice == '4' ]
+then
+	
+	kick_user
 	livetriage_menu
 	
 elif [ $choice == 'back' ]
