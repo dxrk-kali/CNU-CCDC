@@ -11,6 +11,17 @@ BLUE='\033[0;34m'
 patch=1.31
 #END COLORS
 #FUNCTIONS START----------------------------------------------------------------------------------------------------------------------------------------------------
+
+dependency_installer(){
+printf "${YLLW} [+] Installing dependencies..."
+apt-get install gnome
+apt-get install nmap
+apt-get install nikto
+apt-get install snort
+printf "${GREEN} [+] Dependencies installed!"
+sleep 3
+}
+
 nmapipscan(){
 
 printf "${YLLW} [+] Please enter your target IP address ---> "
@@ -129,7 +140,7 @@ printf "
 1) Attack Vector Scanning              |                                       |
 2) Firewall Management                 |                                       |
 3) Live Triage                         |                                       |
-	                               |				       |
+4) Dependency Installer                |				       |
 	                               |                                       |
    				       |                                       |
     				       |                                       |
@@ -159,6 +170,12 @@ elif [ $choice == 'quit' ]
 then
 	exit
 	
+elif [ $choice = '4' ]
+then
+	clear
+	dependency_installer
+	clear
+	front
 elif [ $choice == '5' ]
 then
 	clear
