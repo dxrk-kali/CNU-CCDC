@@ -229,7 +229,8 @@ then
 	service_scan
 	scanmenu
 elif [ $choice == 'back' ]
-then 
+then
+        clear	
 	front
 	clear
 elif [ $choice == 'quit' ]
@@ -320,7 +321,8 @@ then
 	log_cheatsheet
 	Firewall_menu	
 elif [ $choice == 'back' ]
-then 
+then
+        clear	
 	front
 elif [ $choice == 'quit' ]
 then
@@ -375,7 +377,8 @@ then
 	livetriage_menu
 	
 elif [ $choice == 'back' ]
-then 
+then
+        clear	
 	front
 elif [ $choice == 'quit' ]
 then
