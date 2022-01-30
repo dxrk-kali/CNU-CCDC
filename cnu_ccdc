@@ -11,6 +11,17 @@ BLUE='\033[0;34m'
 patch=1.31
 #END COLORS
 #FUNCTIONS START----------------------------------------------------------------------------------------------------------------------------------------------------
+
+dependency_installer(){
+printf "${YLLW} [+] Installing dependencies..."
+apt-get install gnome
+apt-get install nmap
+apt-get install nikto
+apt-get install snort
+printf "${GREEN} [+] Dependencies installed!"
+sleep 3
+}
+
 nmapipscan(){
 printf "${YLLW} [+] Please enter your target IP address ---> "
 read targip
@@ -56,6 +67,18 @@ printf "${GREEN}
 -------------------------------------" 
 sleep 3
 front
+}
+snort1(){
+gnome-terminal --command="bash -c 'snort; $SHELL'"
+}
+
+deploy_SNORT(){
+#check for snort installation and install if not, then deploy
+if hash snort 2>/dev/null; then
+       snort1
+    else
+        apt-get install snort "$@"#might work needs testing
+fi
 }
 service_scan(){
 gnome-terminal --command="bash -c 'service --status-all; $SHELL'"
@@ -133,7 +156,7 @@ printf "
 1) Attack Vector Scanning              |                                       |
 2) Firewall Management                 |                                       |
 3) Live Triage                         |                                       |
-	                               |				       |
+4) Dependency Installer                |				       |
 	                               |                                       |
    				       |                                       |
     				       |                                       |
@@ -163,6 +186,12 @@ elif [ $choice == 'quit' ]
 then
 	exit
 	
+elif [ $choice = '4' ]
+then
+	clear
+	dependency_installer
+	clear
+	front
 elif [ $choice == '5' ]
 then
 	clear
@@ -216,7 +245,8 @@ then
 	service_scan
 	scanmenu
 elif [ $choice == 'back' ]
-then 
+then
+        clear	
 	front
 	clear
 elif [ $choice == 'quit' ]
@@ -245,7 +275,7 @@ printf "
 8) Enable RSYSLOG                      |                                       |
 9) Check RSYSLOG status                |                                       |
 10) Print Log Cheatsheet	       |				       |
-                                       |                                       |
+11) Deploy SNORT ADS                   |                                       |
          MORE SOON!  	               |            MORE SOON!                 |                
                                        |                                       |                
 -------------------------------------------------------------------------------         
@@ -305,9 +335,16 @@ then
 elif [ $choice == '10' ]
 then
 	log_cheatsheet
-	Firewall_menu	
+	Firewall_menu
+
+elif [ $choice == '11' ]
+then
+	deploy_SNORT
+	Firewall_menu
+
 elif [ $choice == 'back' ]
-then 
+then
+        clear	
 	front
 elif [ $choice == 'quit' ]
 then
@@ -368,7 +405,8 @@ then
 	livetriage_menu
 	
 elif [ $choice == 'back' ]
-then 
+then
+        clear	
 	front
 elif [ $choice == 'quit' ]
 then
