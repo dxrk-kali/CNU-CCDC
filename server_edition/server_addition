@@ -1,0 +1,409 @@
+#!/bin/bash
+
+#COLORS
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+GREEN='\033[1;32m'
+YLLW='\033[1;33m'
+DG='\033[0;37m'
+LR='\033[0;31m'
+BLUE='\033[0;34m'
+patch=1.31
+#END COLORS
+#FUNCTIONS START----------------------------------------------------------------------------------------------------------------------------------------------------
+nmapipscan(){
+printf "${YLLW} [+] Please enter your target IP address ---> "
+read targip
+echo '[+] What ports would you like to scan on --->'
+echo '[*] Starting Port ---> '
+read startport
+echo '[*] End Port ---> '
+read endport
+nmap -T4 -A -sC -vv -p$startport-$endport $targip;
+}
+niktowebscan(){
+
+printf  "${YLLW}[+] Enter the URL you would like to scan ---> "
+read url
+nikto -h $url; $SHELL
+clear
+printf "${GREEN}
+-------------------------------------
+[✓] FINISHED SCANNING		 [✓] |
+-------------------------------------"
+}
+updater(){
+git stash save "$patch"
+printf "Is this your first time updating? (yes/no)"
+read choice
+if [ $choice == 'yes' ]
+then
+	printf "Enter your github email: "
+	read email
+	printf "Enter your github username: "
+	read username
+	git config --global user.email "$email"
+	git config --global user.name "$username"
+	clear
+	git pull
+else
+	clear 
+	git pull
+fi
+printf "${GREEN}
+-------------------------------------
+[✓] FINISHED UPDATING		 [✓] |
+-------------------------------------" 
+sleep 3
+front
+}
+service_scan(){
+service --status-all;
+
+}
+firewall_launch(){
+ufw enable;
+}
+firewall_deactivate(){
+ufw disable;
+}
+firewall_status(){
+ufw status verbose;
+}
+enable_logs(){
+ufw logging on;
+}
+disable_logs(){
+ufw logging off;
+}
+check_logs(){
+less /var/log/ufw*;
+
+}
+log_cheatsheet(){
+printf '\n\n\n IN= This field shows the device for incoming traffic.\n OUT= This field shows the device for outgoing traffic. \n MAC= This field shows the device’s MAC address. \n SRC= This field displays a connection source IP address. \n DST= Displays the destination IP address of a connection. \n LEN= This field shows the packet’s length. \n TOS= (Type of Service) This field is used for packet classification, and it is deprecated.\n PREC= This field shows the Precedence Type of Service. \n TTL= This field shows Time To Live. \n ID= This field shows a unique ID for the IP datagram, which is shared by fragments of the same packet. \n PROTO= This field shows the used protocol. \n\n\n'
+}
+rsys_log_start(){
+systemctl start rsyslog; echo [✓] STARTED RSYSLOG [✓];
+}
+enable_rsyslog(){
+systemctl enable rsyslog;
+}
+rsyslog_status(){
+service rsyslog status;
+}
+loggedon_users(){
+w;
+}
+login_logs(){
+last;
+}
+failed_logins(){
+faillog -a;
+}
+kick_user(){
+printf "Enter the name of the user you would like to terminate: "
+read user
+sudo pkill -u $user
+}
+
+#MENUS UNDER THIS COMMENT-------------------------------------------------------------------------------------------------------------------------------------------
+front(){
+printf "
+   			     ______________   _______  __
+   			     __  ____/___  | / /__  / / /
+   		 	     _  /     __   |/ / _  / / / 
+   			     / /___   _  /|  /  / /_/ /  
+   			     \____/   /_/ |_/   \____/   
+                            
+			__________________________ _________
+			__  ____/__  ____/___  __ \__  ____/
+			_  /     _  /     __  / / /_  /     
+			/ /___   / /___   _  /_/ / / /___   
+			\____/   \____/   /_____/  \____/ 
+              
+              			     v${patch}
+              
+   		             Always one step ahead.
+   		                 *RUN AS ROOT* 
+   	
+-------------------------------------------------------------------------------
+                 	           Main Menu                                   |                                                
+-------------------------------------------------------------------------------
+1) Attack Vector Scanning              |                                       |
+2) Firewall Management                 |                                       |
+3) Live Triage                         |                                       |
+	                               |				       |
+	                               |                                       |
+   				       |                                       |
+    				       |                                       |
+                                       |                                       |
+5) Check for client Update             |                                       |
+                                       |                                       |                
+         MORE SOON!  	               |            MORE SOON!                 |                
+                                       |                                       |                
+-------------------------------------------------------------------------------         
+Type 'quit' to exit the program  
+            
+CNU CCDC |${BLUE} root💀kali ---> ${NC}"
+read choice
+if [ $choice == '1' ]
+then
+	clear
+	scanmenu
+elif [ $choice == '2' ]
+then
+	clear
+	Firewall_menu
+elif [ $choice == '3' ]
+then
+	clear
+	livetriage_menu
+elif [ $choice == 'quit' ]
+then
+	exit
+	
+elif [ $choice == '5' ]
+then
+	clear
+	updater
+	
+	
+else
+	echo 'Invalid Menu Selection'
+	front
+fi
+
+}
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+scanmenu(){
+printf "
+-------------------------------------------------------------------------------
+                 	     Attack Vector Scanning                            |                                                
+-------------------------------------------------------------------------------
+1) NMAP Scan  (NMAP)                   |                                       |
+2) Nikto Web Scan (Nikto)              |                                       |
+3) Scan for All Running Services       |                                       |
+	                               |				       |
+	                               |                                       |
+   				       |                                       |
+    				       |                                       |
+                                       |                                       |
+                                       |                                       |
+                                       |                                       |                
+         MORE SOON!  	               |            MORE SOON!                 |                
+                                       |                                       |                
+-------------------------------------------------------------------------------         
+Type 'back' to return to the previous menu
+Type 'quit' to exit the program
+
+CNU CCDC |${BLUE} root💀kali ---> ${NC}"
+read choice
+if [ $choice == '1' ]
+then
+
+	nmapipscan
+	scanmenu
+	
+elif [ $choice == '2' ]
+then
+
+	niktowebscan
+	scanmenu
+elif [ $choice == '3' ]
+then
+
+	service_scan
+	scanmenu
+elif [ $choice == 'back' ]
+then 
+	front
+	clear
+elif [ $choice == 'quit' ]
+then
+	exit
+
+else
+	echo 'Invlaid Selection'
+	clear
+	scanmenu
+fi
+}
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Firewall_menu(){
+printf "
+-------------------------------------------------------------------------------
+                 	     Firewall Menu                                     |                                                
+-------------------------------------------------------------------------------
+1) Launch Firewall (UFW)               |                                       |
+2) Deactivate Firewall (UFW)           |                                       |
+3) Check Firewall Status (UFW)         |                                       |
+4) Enable Logging (UFW)                |                                       |
+5) Disable Logging (UFW)               |                                       |
+6) Check UFW Logs (UFW)                |                                       |
+7) Start RSYSLOG                       |                                       |
+8) Enable RSYSLOG                      |                                       |
+9) Check RSYSLOG status                |                                       |
+10) Print Log Cheatsheet	       |				       |
+                                       |                                       |
+         MORE SOON!  	               |            MORE SOON!                 |                
+                                       |                                       |                
+-------------------------------------------------------------------------------         
+Type 'back' to return to the previous menu
+Type 'quit' to exit the program
+
+CNU CCDC |${BLUE} root💀kali ---> ${NC}"
+read choice
+if [ $choice == '1' ]
+then
+
+	firewall_launch
+	Firewall_menu
+	
+elif [ $choice == '2' ]
+then
+
+	firewall_deactivate
+	Firewall_menu
+	
+elif [ $choice == '3' ]
+then
+
+	firewall_status
+	Firewall_menu
+	
+elif [ $choice == '4' ]
+then
+	enable_logs
+	Firewall_menu
+	
+elif [ $choice == '5' ]
+then
+	disable_logs
+	Firewall_menu
+	
+elif [ $choice == '6' ]
+then
+	check_logs
+	Firewall_menu
+	
+elif [ $choice == '7' ]
+then
+	rsys_log_start
+	Firewall_menu
+	
+elif [ $choice == '8' ]
+then
+	enable_rsyslog
+	Firewall_menu
+	
+elif [ $choice == '9' ]
+then
+	rsyslog_status
+	Firewall_menu
+	
+elif [ $choice == '10' ]
+then
+	log_cheatsheet
+	Firewall_menu	
+elif [ $choice == 'back' ]
+then 
+	front
+elif [ $choice == 'quit' ]
+then
+	exit
+
+else
+	echo 'Invlaid Selection'
+	clear
+	Firewall_menu
+	
+fi
+
+}
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+livetriage_menu(){
+printf "   	
+-------------------------------------------------------------------------------
+                 	           Live Triage                                 |                                                
+-------------------------------------------------------------------------------
+1) List all logged on users            |                                       |
+2) Check Login Logs	               |				       |
+3) View Failed Login Attempts	       |                                       |
+4) Terminate User (PID)   	       |                                       |
+    				       |                                       |
+                                       |                                       |
+                                       |                                       |
+                                       |                                       |                
+         MORE SOON!  	               |            MORE SOON!                 |                
+                                       |                                       |                
+-------------------------------------------------------------------------------         
+Type 'back' to return to the previous menu
+Type 'quit' to exit the program  
+            
+CNU CCDC |${BLUE} root💀kali ---> ${NC}"
+read choice
+if [ $choice == '1' ]
+then
+	
+	loggedon_users
+	livetriage_menu
+	
+elif [ $choice == '2' ]
+then
+	
+	login_logs
+	livetriage_menu
+	
+elif [ $choice == '3' ]
+then
+	
+	failed_logins
+	livetriage_menu
+
+elif [ $choice == '4' ]
+then
+	
+	kick_user
+	livetriage_menu
+	
+elif [ $choice == 'back' ]
+then 
+	front
+elif [ $choice == 'quit' ]
+then
+	exit	
+else
+	echo 'Invalid Menu Selection'
+	front
+fi
+
+
+}
+#END OF FUCNTION DEVELOPMENT -----------------------------------------------------------------------------------------------------------------------------------------
+front
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
