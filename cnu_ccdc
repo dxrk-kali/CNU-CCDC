@@ -12,6 +12,44 @@ patch=1.31
 #END COLORS
 #FUNCTIONS START----------------------------------------------------------------------------------------------------------------------------------------------------
 
+group_create(){
+#create group of users - name?
+printf "${YLLW} [+] Please enter the name of the group you want to create --->"
+read groupName
+groupadd $groupName
+printf "${GREEN} [+] Group: $groupName successfully created!"
+sleep 3
+clear
+}
+
+group_add(){
+#add user to group - user?
+printf "${YLLW} [+] Please enter the name of the group you are adding to --->"
+read group
+printf "${YLLW} [+] Please enter the user you want to add to this group --->"
+read userName
+usermod -a -G $group $userName
+printf "${GREEN} [+] Added user: $userName successfully!"
+sleep 3
+clear
+}
+
+user_identify(){
+#list location of users - user location? - U?
+cat /etc/passwd
+printf "${GREEN} [+] Press enter to continue --->"
+read userInp
+clear
+}
+
+
+process_identifier(){
+cat /etc/services
+sleep 3
+printf "${GREEN} [+] Press enter to continue"
+read anyInput
+}
+
 dependency_installer(){
 printf "${YLLW} [+] Installing dependencies..."
 apt-get install gnome
@@ -213,7 +251,7 @@ printf "
 1) NMAP Scan  (NMAP)                   |                                       |
 2) Nikto Web Scan (Nikto)              |                                       |
 3) Scan for All Running Services       |                                       |
-	                               |				       |
+4) Process Identifier                  |				       |
 	                               |                                       |
    				       |                                       |
     				       |                                       |
@@ -241,9 +279,14 @@ then
 	scanmenu
 elif [ $choice == '3' ]
 then
-
 	service_scan
 	scanmenu
+
+elif [ $choice == '4' ] 
+then
+	process_identifier
+	scanmenu
+
 elif [ $choice == 'back' ]
 then
         clear	
@@ -368,9 +411,9 @@ printf "
 2) Check Login Logs	               |				       |
 3) View Failed Login Attempts	       |                                       |
 4) Terminate User (PID)   	       |                                       |
-    				       |                                       |
-                                       |                                       |
-                                       |                                       |
+5) Create Group			       |                                       |
+6) Add User to Group                   |                                       |
+7) Identify Users                      |                                       |
                                        |                                       |                
          MORE SOON!  	               |            MORE SOON!                 |                
                                        |                                       |                
@@ -404,6 +447,22 @@ then
 	kick_user
 	livetriage_menu
 	
+
+elif [ $choice == '5' ]
+then
+	group_create
+	livetriage_menu
+
+elif [ $choice == '6' ]
+then
+	group_add
+	livetriage_menu
+
+elif [ $choice == '7' ]
+then
+	user_identify
+	livetriage_menu
+
 elif [ $choice == 'back' ]
 then
         clear	
